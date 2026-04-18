@@ -1,0 +1,80 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #0f1117;
+  --bg-card: #181c27;
+  --bg-input: #1e2233;
+  --border: #2a3148;
+  --text-primary: #e8eaf0;
+  --text-secondary: #8b93a8;
+  --text-muted: #4a5168;
+  --brand-green: #a4cf4c;
+  --brand-red: #ec3237;
+  --brand-gold: #f0a500;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text-primary);
+  font-family: system-ui, -apple-system, sans-serif;
+  margin: 0;
+}
+
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.input {
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-primary);
+  padding: 10px 14px;
+  width: 100%;
+  outline: none;
+  font-size: 14px;
+}
+
+.input:focus { border-color: var(--brand-green); }
+
+.btn-primary {
+  background: var(--brand-green);
+  color: #0f1117;
+  font-weight: 700;
+  padding: 10px 22px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  transition: opacity 0.15s;
+}
+.btn-primary:hover { opacity: 0.88; }
+.btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.btn-danger {
+  background: var(--brand-red);
+  color: #fff;
+  font-weight: 700;
+  padding: 10px 22px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.badge-bronze { background: #5c3a1a; color: #cd7f32; }
+.badge-silver { background: #2a3040; color: #c0c0c0; }
+.badge-gold   { background: #3a3010; color: #f0a500; }
+.badge-diamond { background: #1a2a3a; color: #7df9ff; }
