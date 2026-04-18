@@ -5,13 +5,18 @@ import { Job } from "@/lib/types";
 
 const PLATFORMS = ["youtube", "tiktok", "instagram", "other"];
 const REWARD_TYPES = ["cash", "voucher", "gift_code"];
+const TOPICS = [
+  "Culture & Lifestyle", "Music & Entertainment", "News & Current Affairs",
+  "Business & Finance", "Sports", "Food & Cooking", "Comedy",
+  "Education", "Politics", "Religion & Spirituality", "General",
+];
 
 export default function AdminPage() {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [form, setForm] = useState({
     title: "", video_url: "", platform: "youtube",
     duration_secs: "", reward_type: "cash", reward_detail: "",
-    language_tags: "patois,english",
+    language_tags: "patois,english", topic: "General", priority: "2",
   });
   const [adding, setAdding] = useState(false);
   const [msg, setMsg] = useState("");
@@ -81,6 +86,20 @@ export default function AdminPage() {
           <div>
             <label style={{ fontSize: 12, color: "var(--text-secondary)", display: "block", marginBottom: 4 }}>Language Tags (comma separated)</label>
             <input className="input" value={form.language_tags} onChange={set("language_tags")} placeholder="patois,english" />
+          </div>
+          <div>
+            <label style={{ fontSize: 12, color: "var(--text-secondary)", display: "block", marginBottom: 4 }}>Topic</label>
+            <select className="input" value={form.topic} onChange={set("topic")}>
+              {TOPICS.map((t) => <option key={t} value={t}>{t}</option>)}
+            </select>
+          </div>
+          <div>
+            <label style={{ fontSize: 12, color: "var(--text-secondary)", display: "block", marginBottom: 4 }}>Priority</label>
+            <select className="input" value={form.priority} onChange={set("priority")}>
+              <option value="1">🔴 High — rare Patois, critical for dataset</option>
+              <option value="2">🟡 Medium — good dataset value</option>
+              <option value="3">⚫ Low — standard content</option>
+            </select>
           </div>
           <div style={{ gridColumn: "1/-1", display: "flex", gap: 12, alignItems: "center" }}>
             <button className="btn-primary" type="submit" disabled={adding}>{adding ? "Adding..." : "Add Job"}</button>

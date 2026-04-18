@@ -39,6 +39,8 @@ export interface Job {
   addon_enabled: boolean;
   addon_type: "user_choice" | "choice_plus_random" | null;
   language_tags: string[];
+  topic: string;
+  priority: 1 | 2 | 3;
   status: JobStatus;
   created_at: string;
 }

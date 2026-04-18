@@ -47,6 +47,10 @@ CREATE TABLE IF NOT EXISTS jobs (
   addon_enabled   BOOLEAN NOT NULL DEFAULT false,
   addon_type      TEXT,                        -- user_choice | choice_plus_random
   language_tags   TEXT[] NOT NULL DEFAULT '{}', -- ['patois','english']
+  -- topic: how jobs are grouped on the board
+  topic           TEXT NOT NULL DEFAULT 'general',
+  -- priority: 1=high (rare/critical for dataset), 2=medium, 3=low
+  priority        INTEGER NOT NULL DEFAULT 2 CHECK (priority BETWEEN 1 AND 3),
   -- status: available | claimed | submitted | grading | approved | rejected | paid
   status          TEXT NOT NULL DEFAULT 'available',
   created_by      UUID REFERENCES users(id),
@@ -115,6 +119,8 @@ CREATE TABLE IF NOT EXISTS payments (
 
 -- ─── INDEXES ─────────────────────────────────────────────────────────────────
 CREATE INDEX IF NOT EXISTS idx_jobs_status ON jobs(status);
+CREATE INDEX IF NOT EXISTS idx_jobs_topic ON jobs(topic);
+CREATE INDEX IF NOT EXISTS idx_jobs_priority ON jobs(priority);
 CREATE INDEX IF NOT EXISTS idx_claims_user ON claims(user_id);
 CREATE INDEX IF NOT EXISTS idx_claims_job ON claims(job_id);
 CREATE INDEX IF NOT EXISTS idx_submissions_user ON submissions(user_id);

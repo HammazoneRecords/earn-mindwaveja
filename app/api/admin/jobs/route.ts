@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
-  const { title, video_url, platform, duration_secs, reward_type, reward_detail, language_tags } =
+  const { title, video_url, platform, duration_secs, reward_type, reward_detail, language_tags, topic, priority } =
     await req.json();
 
   if (!title || !video_url || !platform || !duration_secs) {
@@ -23,13 +23,15 @@ export async function POST(req: NextRequest) {
 
   const result = await pool.query(
     `INSERT INTO jobs (title, video_url, platform, duration_secs, pay_jmd, reward_type, reward_detail,
-                       addon_enabled, addon_type, language_tags, created_by)
-     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING *`,
+                       addon_enabled, addon_type, language_tags, topic, priority, created_by)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) RETURNING *`,
     [
       title, video_url, platform, duration_secs, pay_jmd,
       reward_type ?? "cash", reward_detail ?? null,
       addon_enabled, addon_type,
       language_tags ?? ["english"],
+      topic ?? "general",
+      priority ?? 2,
       session.userId,
     ]
   );
