@@ -1,7 +1,10 @@
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
 const FROM = "earn@mindwaveja.com";
+
+function getResend() {
+  return new Resend(process.env.RESEND_API_KEY ?? "placeholder");
+}
 
 export async function sendClaimConfirmed(
   to: string,
@@ -9,7 +12,7 @@ export async function sendClaimConfirmed(
   expiresAt: Date
 ) {
   const deadline = expiresAt.toLocaleString("en-JM", { timeZone: "America/Jamaica" });
-  await resend.emails.send({
+  await getResend().emails.send({
     from: FROM,
     to,
     subject: `Job claimed — "${jobTitle}"`,
@@ -18,7 +21,7 @@ export async function sendClaimConfirmed(
 }
 
 export async function sendSubmissionReceived(to: string, jobTitle: string) {
-  await resend.emails.send({
+  await getResend().emails.send({
     from: FROM,
     to,
     subject: `Submission received — "${jobTitle}"`,
@@ -33,14 +36,14 @@ export async function sendGradeResult(
   notes?: string
 ) {
   if (approved) {
-    await resend.emails.send({
+    await getResend().emails.send({
       from: FROM,
       to,
       subject: `Approved — payment incoming for "${jobTitle}"`,
       text: `Your transcription for "${jobTitle}" was approved. Payment will be sent within 1 business day.\n\n${notes ? `Grader notes: ${notes}` : ""}`,
     });
   } else {
-    await resend.emails.send({
+    await getResend().emails.send({
       from: FROM,
       to,
       subject: `Transcription needs improvement — "${jobTitle}"`,
@@ -61,7 +64,7 @@ export async function sendPaymentProof(
       ? `J$${amountJmd.toLocaleString()} JMD`
       : rewardDetail ?? rewardType;
 
-  await resend.emails.send({
+  await getResend().emails.send({
     from: FROM,
     to,
     subject: `Payment confirmed — "${jobTitle}"`,
