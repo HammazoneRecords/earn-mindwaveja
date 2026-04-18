@@ -4,14 +4,17 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { User } from "@/lib/types";
 
+interface ActiveClaim { id: string; job_id: string; job_title: string; expires_at: string; }
+interface HistoryItem { id: string; job_title: string; status: string; quality_score: number | null; submitted_at: string; }
+
 const tierColors: Record<string, string> = {
   bronze: "#cd7f32", silver: "#c0c0c0", gold: "#f0a500", diamond: "#7df9ff",
 };
 
 export default function DashboardPage() {
   const [user, setUser] = useState<User | null>(null);
-  const [history, setHistory] = useState<unknown[]>([]);
-  const [activeClaim, setActiveClaim] = useState<unknown>(null);
+  const [history, setHistory] = useState<HistoryItem[]>([]);
+  const [activeClaim, setActiveClaim] = useState<ActiveClaim | null>(null);
 
   useEffect(() => {
     fetch("/api/auth/me").then((r) => r.json()).then((d) => setUser(d.user));
@@ -61,9 +64,9 @@ export default function DashboardPage() {
         <div className="card" style={{ padding: 20, marginBottom: 24, borderColor: "rgba(164,207,76,0.4)" }}>
           <p style={{ color: "var(--brand-green)", fontWeight: 700, fontSize: 13, marginBottom: 8 }}>Active Job</p>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
-            <p style={{ fontWeight: 600 }}>{(activeClaim as { job_title: string }).job_title}</p>
+            <p style={{ fontWeight: 600 }}>{activeClaim.job_title}</p>
             <Link
-              href={`/jobs/${(activeClaim as { job_id: string }).job_id}`}
+              href={`/jobs/${activeClaim.job_id}`}
               style={{ background: "var(--brand-green)", color: "#0f1117", padding: "8px 16px", borderRadius: 8, fontWeight: 700, fontSize: 13, textDecoration: "none" }}
             >
               Continue →
@@ -89,7 +92,7 @@ export default function DashboardPage() {
         <p style={{ color: "var(--text-muted)", fontSize: 14 }}>No submissions yet. Claim your first job above.</p>
       ) : (
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          {(history as { id: string; job_title: string; status: string; quality_score: number; submitted_at: string }[]).map((item) => (
+          {history.map((item) => (
             <div key={item.id} className="card" style={{ padding: 18, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
               <div>
                 <p style={{ fontWeight: 600, marginBottom: 4 }}>{item.job_title}</p>
